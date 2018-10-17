@@ -1,4 +1,12 @@
+# os
 .DS_Store
+
+# IDE
 .idea
+
+# build
 dist/
 node_modules/
+
+# log
+yarn-error.log

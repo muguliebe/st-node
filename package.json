@@ -9,6 +9,7 @@
     "lint": "eslint src",
     "precommit": "yarn run lint",
     "watch": "nodemon -w src --exec yarn run serve",
+    "test:e2e": "cucumber-js spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
     "serve": "yarn run build && node dist/index.js"
   },
   "author": "zany",
@@ -19,6 +20,8 @@
     "@babel/core": "^7.1.2",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0",
+    "cucumber": "^5.0.2",
     "eslint": "^5.7.0",
     "husky": "^1.1.2",
     "nodemon": "^1.18.4",
