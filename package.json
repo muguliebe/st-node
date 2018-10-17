@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist/ && babel src -d dist",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "fix": "eslint src --fix",
     "lint": "eslint src",
+    "build": "rimraf dist/ && babel src -d dist",
+    "fix": "eslint src --fix",
     "precommit": "yarn run lint",
-    "watch": "nodemon -w src --exec yarn run serve",
-    "test:e2e": "dotenv cucumber-js -- spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
-    "serve": "yarn run build && dotenv node dist/index.js"
+    "test": "dotenv cucumber-js -- spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
+    "serve": "yarn run build && dotenv node dist/index.js",
+    "watch": "nodemon -w src --exec yarn run serve"
   },
   "author": "zany",
   "license": "MIT",
@@ -31,6 +30,8 @@
     "superagent": "^4.0.0-beta.5"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0"
+    "@babel/polyfill": "^7.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
   }
 }
