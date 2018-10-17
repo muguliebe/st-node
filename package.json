@@ -9,8 +9,8 @@
     "lint": "eslint src",
     "precommit": "yarn run lint",
     "watch": "nodemon -w src --exec yarn run serve",
-    "test:e2e": "cucumber-js spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
-    "serve": "yarn run build && node dist/index.js"
+    "test:e2e": "dotenv cucumber-js -- spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
+    "serve": "yarn run build && dotenv node dist/index.js"
   },
   "author": "zany",
   "license": "MIT",
@@ -22,10 +22,13 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/register": "^7.0.0",
     "cucumber": "^5.0.2",
+    "dotenv-cli": "^1.4.0",
     "eslint": "^5.7.0",
     "husky": "^1.1.2",
+    "ndb": "^1.0.26",
     "nodemon": "^1.18.4",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "superagent": "^4.0.0-beta.5"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0"
