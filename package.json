@@ -4,9 +4,12 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf dist/ && babel src -d dist",
-    "serve": "yarn run build && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon -w src --exec yarn run serve"
+    "fix": "eslint src --fix",
+    "lint": "eslint src",
+    "precommit": "yarn run lint",
+    "watch": "nodemon -w src --exec yarn run serve",
+    "serve": "yarn run build && node dist/index.js"
   },
   "author": "zany",
   "license": "MIT",
@@ -15,6 +18,8 @@
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
+    "eslint": "^5.7.0",
+    "husky": "^1.1.2",
     "nodemon": "^1.18.4",
     "rimraf": "^2.6.2"
   },
