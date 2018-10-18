@@ -3,8 +3,8 @@ import { Then, When } from 'cucumber'
 import superagent     from 'superagent'
 
 When(/^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([\/\w-]+)$/, function(method, path) {
-    const host   = process.env.SERVER_HOSTNAME
-    const port   = process.env.SERVER_PORT
+    const host = process.env.SERVER_HOSTNAME
+    const port = process.env.SERVER_PORT
     this.request = superagent(method, `${host}:${port}${path}`)
 })
 
@@ -59,3 +59,12 @@ When(/^without a (?:"|')([\w-]+)(?:"|') header set$/, function(headerName) {
     this.request.unset(headerName)
 })
 
+When(/^attaches an? (.+) payload which is missing the ([a-zA-Z0-9, ]+) fields?$/, function(payloadType, missingFields) {
+    const payload = {
+        email: 'e@ma.il',
+        password: 'password',
+    }
+    const fieldsToDelete = missingFields.split(',').map(s => s.trim()).filter(s => s !== '')
+    fieldsToDelete.forEach(field => delete payload[field])
+    this.request.send(JSON.stringify(payload)).set('Content-Type', 'application/json')
+})

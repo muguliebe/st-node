@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'
 import advice     from './fwk/filter/advice'
 
 const router = express.Router()
-const app    = express()
+const app = express()
 
 // =================================================================================================
 // config
@@ -57,22 +57,16 @@ router.use(checkContentTypeIsJson)
 
 // =================================================================================================
 // controller
-app.post('/users', (req, res) => {
-    if (parseInt(req.headers['content-length']) === 0) {
+app.post('/users', (req, res, next) => {
+    if (
+        !Object.prototype.hasOwnProperty.call(req.body, 'email')
+        || !Object.prototype.hasOwnProperty.call(req.body, 'password')
+    ) {
         res.status(400)
         res.set('Content-Type', 'application/json')
-        res.end(JSON.stringify({ message: 'Payload should not be empty' }))
-        return
+        res.json({ message: 'Payload must contain at least the email and password fields' })
     }
-    if (req.headers['content-type'] !== 'application/json') {
-        res.status(415)
-        res.set('Content-Type', 'application/json')
-        res.end(JSON.stringify({ message: 'The "Content-Type" header must always be "application/json"' }))
-        return
-    }
-    res.status(400)
-    res.set('Content-Type', 'application/json')
-    res.json({ message: 'Payload should be in JSON format' })
+    next()
 })
 
 app.use('/', (req, res) => {
