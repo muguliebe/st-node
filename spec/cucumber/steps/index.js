@@ -2,13 +2,10 @@ import assert         from 'assert'
 import { Then, When } from 'cucumber'
 import superagent     from 'superagent'
 
-When(/^the client creates a POST request to \/users$/, function() {
-    const host = process.env.SERVER_HOSTNAME
-    const port = process.env.SERVER_PORT
-    this.request = superagent('POST', `${host}:${port}/users`)
-})
-When(/^attaches a generic empty payload$/, function() {
-    return undefined
+When(/^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([\/\w-]+)$/, function(method, path) {
+    const host   = process.env.SERVER_HOSTNAME
+    const port   = process.env.SERVER_PORT
+    this.request = superagent(method, `${host}:${port}${path}`)
 })
 
 When(/^sends the request$/, function(callback) {
@@ -44,13 +41,21 @@ Then(/^contains a message property which says (?:"|')(.*)(?:"|')$/, function(mes
     assert.equal(this.responsePayload.message, message)
 })
 
-When('attaches a generic non-JSON payload', function() {
-    this.request.send('<?xml version="1.0" encoding="UTF-8" ?><email>dan@danyll.com</email>')
-    this.request.set('Content-Type', 'text/xml')
+When(/^attaches a generic (.+) payload$/, function(payloadType) {
+    switch (payloadType) {
+        case 'malformed':
+            this.request.send('{"email": "dan@danyll.com", name: }').set('Content-Type', 'application/json')
+            return
+        case 'non-JSON':
+            this.request.send('<?xml version="1.0" encoding="UTF-8" ?><email>dan@danyll.com</email>').set('Content-Type', 'text/xml')
+            return
+        case 'empty':
+        default:
+            return
+    }
 })
 
-When('attaches a generic malformed payload', function() {
-    this.request.send('{"email": "dan@danyll.com", name: }')
-    this.request.set('Content-Type', 'application/json')
+When(/^without a (?:"|')([\w-]+)(?:"|') header set$/, function(headerName) {
+    this.request.unset(headerName)
 })
 
