@@ -39,3 +39,12 @@ Feature: General
     Then our API should respond with a 415 HTTP status code
     And the payload of the response should be a JSON object
     And contains a message property which says 'The "Content-Type" header must always be "application/json"'
+
+  Scenario: Minimal Valid User
+
+    When the client creates a POST request to /users
+    And attaches a valid Create User payload
+    And sends the request
+    Then our API should respond with a 201 HTTP status code
+    And the payload of the response should be a string
+    And the payload object should be added to the database, grouped under the "user" type

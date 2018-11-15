@@ -12,63 +12,13 @@ const app = express()
 config({ path: '../.env' })
 
 // =================================================================================================
-// functions
-function checkEmptyPayload (req, res, next) {
-    if (['POST', 'PATCH', 'PUT'].includes(req.method) && req.headers['content-length'] === '0') {
-        res.status(400)
-        res.set('Content-Type', 'application/json')
-        res.json({
-            message: 'Payload should not be empty',
-        })
-    }
-    next()
-}
-
-function checkContentTypeIsSet (req, res, next) {
-    if (
-        req.headers['content-length']
-        && req.headers['content-length'] !== '0'
-        && !req.headers['content-type']
-    ) {
-        res.status(400)
-        res.set('Content-Type', 'application/json')
-        res.json({ message: 'The "Content-Type" header must be set for requests with a non-empty payload' })
-    }
-    next()
-}
-
-function checkContentTypeIsJson (req, res, next) {
-    if (!req.headers['content-type'].includes('application/json')) {
-        res.status(415)
-        res.set('Content-Type', 'application/json')
-        res.json({ message: 'The "Content-Type" header must always be "application/json"' })
-    }
-    next()
-}
-
-// =================================================================================================
 // default express set
 app.use(router)
 router.use(advice.allAround())
 app.use(bodyParser.json({ limit: 1e6 }))
-router.use(checkEmptyPayload)
-router.use(checkContentTypeIsSet)
-router.use(checkContentTypeIsJson)
 
 // =================================================================================================
 // controller
-app.post('/users', (req, res, next) => {
-    if (
-        !Object.prototype.hasOwnProperty.call(req.body, 'email')
-        || !Object.prototype.hasOwnProperty.call(req.body, 'password')
-    ) {
-        res.status(400)
-        res.set('Content-Type', 'application/json')
-        res.json({ message: 'Payload must contain at least the email and password fields' })
-    }
-    next()
-})
-
 app.use('/', (req, res) => {
     res.status(200)
     res.set('Content-Type', 'application/json')
